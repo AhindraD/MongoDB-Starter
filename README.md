@@ -1,7 +1,7 @@
 # Mongo Queries Practice
 For Below Questions, use data provided with the ‘restaurants.json’ file and load it to a MongoDB instance.
 
-##[MongoDB CheetSheet](https://www.mongodb.com/developer/products/mongodb/cheat-sheet/#crud)
+## [MongoDB CheetSheet](https://www.mongodb.com/developer/products/mongodb/cheat-sheet/#crud)
 
 - How to load JSON file to MongoDB instance?
 ```js
