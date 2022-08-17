@@ -78,7 +78,10 @@ db.restaurants.find({borough:"Brooklyn"},{ name:true, borough:true,cuisine:true}
 
 9. Write a MongoDB query to find the restaurants that achieved a score, of more than 70 but less than 100.
 ```js
-mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.json
+db.restaurants.find({
+    "grades.score":{$gt : 80 , $lt :100}
+    },
+    { name:true, borough:true,cuisine:true, restaurant_id:true})
 ```
 <br>
 <br>
@@ -86,7 +89,12 @@ mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.j
 
 10. Write a MongoDB query to find the restaurants which do not prepare any cuisine of ‘American’ and achieved a grade point ‘A’ not belonging to the borough Brooklyn. The document must be displayed according to the cuisine in descending order.
 ```js
-mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.json
+db.restaurants.find({
+                        "cuisine" : {$ne : "American "},
+                        "grades.grade" :'A',
+                        "borough" : {$ne : "Brooklyn"},
+                         
+},{ name:true, borough:true,cuisine:true, restaurant_id:true})
 ```
 <br>
 <br>
@@ -94,7 +102,11 @@ mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.j
 
 11. Write a MongoDB query to find the restaurants which belong to the borough Bronx and prepared either American or Chinese dishes.
 ```js
-mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.json
+db.restaurants.find({
+                        "cuisine" : {$in: ["American ","Chinese"]},
+                        "borough" :  "Bronx",
+                         
+},{ name:true, borough:true,cuisine:true, restaurant_id:true})
 ```
 <br>
 <br>
@@ -102,7 +114,14 @@ mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.j
 
 12. Write a MongoDB query to find the restaurant Id, name, borough, and cuisine for those restaurants which prepared dishes except ‘American’ and ‘Chinese’ or the restaurant’s name begins with the letter ‘Sea’.
 ```js
-mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.json
+db.restaurants.find({$or: [
+                        {"cuisine" : {$nin: ["American ","Chinese"]}},
+                        {name: /^Sea/},
+                         
+]},{ name:true, borough:true,cuisine:true, restaurant_id:true})
+
+
+//db.restaurants.find({name: /^Sea/},{ name:true, borough:true,cuisine:true, restaurant_id:true})
 ```
 <br>
 <br>
@@ -110,7 +129,10 @@ mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.j
 
 13. Write a MongoDB query to arrange the name of the cuisine in ascending order and for that same cuisine, the borough should be in descending order.
 ```js
-mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.json
+db.restaurants.find().sort(
+                           {"cuisine":1,"borough" : -1,},
+                           { name:true, borough:true,cuisine:true, restaurant_id:true}
+                          );
 ```
 <br>
 <br>
@@ -118,7 +140,12 @@ mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.j
 
 14. Write a MongoDB query to find the restaurant Id, name, and grades for those restaurants which achieved a grade of “A” and scored 11 on an ISODate “2013–09–11T00:00:00Z” among many of the survey dates.
 ```js
-mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.json
+db.restaurants.find( {
+                 "grades.date": ISODate("2013-09-09T00:00:00Z"), 
+                 "grades.grade":"A" , 
+                 "grades.score" : 11
+                }, 
+    { name:true, borough:true,cuisine:true, restaurant_id:true})
 ```
 <br>
 <br>
@@ -126,7 +153,7 @@ mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.j
 
 15. Write a MongoDB query to arrange the name of the restaurants in ascending order along with all the columns.
 ```js
-mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.json
+db.restaurants.find({}).sort({"name":1})
 ```
 <br>
 <br>
@@ -134,7 +161,17 @@ mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.j
 
 16. Write an aggregation pipeline to count the number of restaurants in the borough “Bronx” for each cuisine type. Display the number of restaurants that prepare Caribbean cuisine. A single query is expected that satisfies all the above requirements.
 ```js
-mongoimport --jsonArray --db day44 --collection restaurants --file restaurants.json
+db.restaurants.countDocuments({borough: "Bronx",cuisine:"Caribbean"})
+
+//BOTH VALID
+db.restaurants.aggregate([
+     {
+        "$match": { borough: "Bronx",cuisine:"Caribbean"}
+     },
+     {
+        "$count": "number of Caribbean cuisine in “Bronx”"
+     }
+])
 ```
 <br>
 <br>
